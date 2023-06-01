@@ -17,7 +17,12 @@ export const createCart = (req: Request, res: Response) => {
         // and creating cart lists
         for (const obj in products) {
           const items = products[obj];
+
           for (const b in items.lists) {
+            // creating cart list
+            if (items.lists[b].id === cart[s].id) {
+              cartItems.push(items.lists[b]);
+            }
             // This is to handle individual product to check that its part of
             // combo offer list. if its part then add the related comboId to the cart List
             for (const i in comboLists) {
@@ -38,10 +43,6 @@ export const createCart = (req: Request, res: Response) => {
                 }
               }
             }
-            // creating cart list
-            if (items.lists[b].id === cart[s].id) {
-              cartItems.push(items.lists[b]);
-            }
           }
         }
       }
@@ -53,11 +54,9 @@ export const createCart = (req: Request, res: Response) => {
     return res.status(400).send({ msg: error.message });
   }
 
-  res
-    .status(200)
-    .send({
-      totalCartItems: cartItems.length,
-      combosAddedToCart: combosAddedToCart,
-      message: "Added to cart succesfully",
-    });
+  res.status(200).send({
+    totalCartItems: cartItems.length,
+    combosAddedToCart: combosAddedToCart,
+    message: "Added to cart succesfully",
+  });
 };
